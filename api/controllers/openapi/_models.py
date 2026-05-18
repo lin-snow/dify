@@ -6,7 +6,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from libs.helper import UUIDStrOrEmpty, uuid_value
+from libs.helper import EmailStr, UUIDStrOrEmpty, uuid_value
 from models.model import AppMode
 
 # Server-side cap on `limit` query param for /openapi/v1/* list endpoints.
@@ -324,3 +324,48 @@ class PermittedExternalAppsListQuery(BaseModel):
     limit: int = Field(20, ge=1, le=MAX_PAGE_LIMIT)
     mode: AppMode | None = None
     name: str | None = Field(None, max_length=200)
+
+
+# Closed enum for invite/update-role payloads. Owner is intentionally not
+# assignable through these endpoints — ownership transfer goes through the
+# console's three-step email-verification flow.
+MemberAssignableRole = Literal["normal", "admin"]
+
+
+class MemberResponse(BaseModel):
+    id: str
+    name: str
+    email: str
+    role: str
+    status: str
+    avatar: str | None = None
+
+
+class MemberListResponse(BaseModel):
+    members: list[MemberResponse]
+
+
+class MemberInvitePayload(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    email: EmailStr
+    role: MemberAssignableRole
+
+
+class MemberRoleUpdatePayload(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    role: MemberAssignableRole
+
+
+class MemberInviteResponse(BaseModel):
+    result: Literal["success"] = "success"
+    email: str
+    role: str
+    member_id: str
+    invite_url: str | None = None
+    tenant_id: str
+
+
+class MemberActionResponse(BaseModel):
+    result: Literal["success"] = "success"
