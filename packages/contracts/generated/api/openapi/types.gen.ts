@@ -143,6 +143,23 @@ export type DevicePollRequest = {
   device_code: string
 }
 
+export type FileResponse = {
+  conversation_id?: string | null
+  created_at?: number | null
+  created_by?: string | null
+  extension?: string | null
+  file_key?: string | null
+  id: string
+  mime_type?: string | null
+  name: string
+  original_url?: string | null
+  preview_url?: string | null
+  size: number
+  source_url?: string | null
+  tenant_id?: string | null
+  user_id?: string | null
+}
+
 export type HumanInputFormSubmitPayload = {
   action: string
   inputs: {
@@ -151,6 +168,41 @@ export type HumanInputFormSubmitPayload = {
 }
 
 export type JsonValue = unknown
+
+export type MemberActionResponse = {
+  result?: string
+}
+
+export type MemberInvitePayload = {
+  email: string
+  role: 'admin' | 'normal'
+}
+
+export type MemberInviteResponse = {
+  email: string
+  invite_url?: string | null
+  member_id: string
+  result?: string
+  role: string
+  tenant_id: string
+}
+
+export type MemberListResponse = {
+  members: Array<MemberResponse>
+}
+
+export type MemberResponse = {
+  avatar?: string | null
+  email: string
+  id: string
+  name: string
+  role: string
+  status: string
+}
+
+export type MemberRoleUpdatePayload = {
+  role: 'admin' | 'normal'
+}
 
 export type MessageMetadata = {
   retriever_resources?: Array<{
@@ -377,6 +429,40 @@ export type GetAppsByAppIdDescribeResponses = {
 export type GetAppsByAppIdDescribeResponse
   = GetAppsByAppIdDescribeResponses[keyof GetAppsByAppIdDescribeResponses]
 
+export type PostAppsByAppIdFilesUploadData = {
+  body?: never
+  path: {
+    app_id: string
+  }
+  query?: never
+  url: '/apps/{app_id}/files/upload'
+}
+
+export type PostAppsByAppIdFilesUploadErrors = {
+  400: {
+    [key: string]: unknown
+  }
+  401: {
+    [key: string]: unknown
+  }
+  413: {
+    [key: string]: unknown
+  }
+  415: {
+    [key: string]: unknown
+  }
+}
+
+export type PostAppsByAppIdFilesUploadError
+  = PostAppsByAppIdFilesUploadErrors[keyof PostAppsByAppIdFilesUploadErrors]
+
+export type PostAppsByAppIdFilesUploadResponses = {
+  201: FileResponse
+}
+
+export type PostAppsByAppIdFilesUploadResponse
+  = PostAppsByAppIdFilesUploadResponses[keyof PostAppsByAppIdFilesUploadResponses]
+
 export type GetAppsByAppIdFormHumanInputByFormTokenData = {
   body?: never
   path: {
@@ -587,3 +673,85 @@ export type GetWorkspacesByWorkspaceIdResponses = {
 
 export type GetWorkspacesByWorkspaceIdResponse
   = GetWorkspacesByWorkspaceIdResponses[keyof GetWorkspacesByWorkspaceIdResponses]
+
+export type GetWorkspacesByWorkspaceIdMembersData = {
+  body?: never
+  path: {
+    workspace_id: string
+  }
+  query?: never
+  url: '/workspaces/{workspace_id}/members'
+}
+
+export type GetWorkspacesByWorkspaceIdMembersResponses = {
+  200: MemberListResponse
+}
+
+export type GetWorkspacesByWorkspaceIdMembersResponse
+  = GetWorkspacesByWorkspaceIdMembersResponses[keyof GetWorkspacesByWorkspaceIdMembersResponses]
+
+export type PostWorkspacesByWorkspaceIdMembersData = {
+  body: MemberInvitePayload
+  path: {
+    workspace_id: string
+  }
+  query?: never
+  url: '/workspaces/{workspace_id}/members'
+}
+
+export type PostWorkspacesByWorkspaceIdMembersResponses = {
+  201: MemberInviteResponse
+}
+
+export type PostWorkspacesByWorkspaceIdMembersResponse
+  = PostWorkspacesByWorkspaceIdMembersResponses[keyof PostWorkspacesByWorkspaceIdMembersResponses]
+
+export type DeleteWorkspacesByWorkspaceIdMembersByMemberIdData = {
+  body?: never
+  path: {
+    member_id: string
+    workspace_id: string
+  }
+  query?: never
+  url: '/workspaces/{workspace_id}/members/{member_id}'
+}
+
+export type DeleteWorkspacesByWorkspaceIdMembersByMemberIdResponses = {
+  200: MemberActionResponse
+}
+
+export type DeleteWorkspacesByWorkspaceIdMembersByMemberIdResponse
+  = DeleteWorkspacesByWorkspaceIdMembersByMemberIdResponses[keyof DeleteWorkspacesByWorkspaceIdMembersByMemberIdResponses]
+
+export type PutWorkspacesByWorkspaceIdMembersByMemberIdRoleData = {
+  body: MemberRoleUpdatePayload
+  path: {
+    member_id: string
+    workspace_id: string
+  }
+  query?: never
+  url: '/workspaces/{workspace_id}/members/{member_id}/role'
+}
+
+export type PutWorkspacesByWorkspaceIdMembersByMemberIdRoleResponses = {
+  200: MemberActionResponse
+}
+
+export type PutWorkspacesByWorkspaceIdMembersByMemberIdRoleResponse
+  = PutWorkspacesByWorkspaceIdMembersByMemberIdRoleResponses[keyof PutWorkspacesByWorkspaceIdMembersByMemberIdRoleResponses]
+
+export type PostWorkspacesByWorkspaceIdSwitchData = {
+  body?: never
+  path: {
+    workspace_id: string
+  }
+  query?: never
+  url: '/workspaces/{workspace_id}/switch'
+}
+
+export type PostWorkspacesByWorkspaceIdSwitchResponses = {
+  200: WorkspaceDetailResponse
+}
+
+export type PostWorkspacesByWorkspaceIdSwitchResponse
+  = PostWorkspacesByWorkspaceIdSwitchResponses[keyof PostWorkspacesByWorkspaceIdSwitchResponses]
