@@ -1,6 +1,6 @@
 import type { MemberListResponse } from '@dify/contracts/api/openapi/types.gen'
-import type { KyInstance } from 'ky'
 import type { HostsBundle } from '../../../auth/hosts.js'
+import type { HttpClient } from '../../../http/types.js'
 import { describe, expect, it, vi } from 'vitest'
 import { bufferStreams } from '../../../io/streams.js'
 import { runGetMember } from './run.js'
@@ -34,7 +34,7 @@ describe('runGetMember', () => {
       {},
       {
         bundle: bundle(),
-        http: {} as KyInstance,
+        http: {} as HttpClient,
         io: bufferStreams(),
         membersFactory: () => client as never,
       },
@@ -51,7 +51,7 @@ describe('runGetMember', () => {
       { workspace: 'ws-9' },
       {
         bundle: bundle(),
-        http: {} as KyInstance,
+        http: {} as HttpClient,
         io: bufferStreams(),
         membersFactory: () => client as never,
       },
@@ -68,7 +68,7 @@ describe('runGetMember', () => {
       {},
       {
         bundle: b,
-        http: {} as KyInstance,
+        http: {} as HttpClient,
         io: bufferStreams(),
         membersFactory: () => client as never,
       },
@@ -88,7 +88,7 @@ describe('runGetMember', () => {
             tokens: { bearer: 'dfoa_test' },
             account: { id: 'acct-1', email: '', name: '' },
           },
-          http: {} as KyInstance,
+          http: {} as HttpClient,
           io: bufferStreams(),
           envLookup: () => undefined,
           membersFactory: () => client as never,
@@ -111,7 +111,7 @@ describe('MemberListOutput shape', () => {
       {},
       {
         bundle: bundle(),
-        http: {} as KyInstance,
+        http: {} as HttpClient,
         io: bufferStreams(),
         membersFactory: () => client as never,
       },

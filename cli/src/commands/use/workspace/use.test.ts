@@ -2,8 +2,8 @@ import type {
   WorkspaceDetailResponse,
   WorkspaceListResponse,
 } from '@dify/contracts/api/openapi/types.gen'
-import type { KyInstance } from 'ky'
 import type { HostsBundle } from '../../../auth/hosts.js'
+import type { HttpClient } from '../../../http/types.js'
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -69,7 +69,7 @@ describe('runUseWorkspace', () => {
       {
         configDir,
         bundle: b,
-        http: {} as KyInstance,
+        http: {} as HttpClient,
         io,
         workspacesFactory: () => client as never,
       },
@@ -98,7 +98,7 @@ describe('runUseWorkspace', () => {
 
     await runUseWorkspace(
       { workspaceId: 'ws-2' },
-      { configDir, bundle: b, http: {} as KyInstance, io, workspacesFactory: () => client as never },
+      { configDir, bundle: b, http: {} as HttpClient, io, workspacesFactory: () => client as never },
     )
 
     const reloaded = await loadHosts(configDir)
@@ -122,7 +122,7 @@ describe('runUseWorkspace', () => {
         {
           configDir,
           bundle: b,
-          http: {} as KyInstance,
+          http: {} as HttpClient,
           io,
           workspacesFactory: () => client as never,
         },
@@ -151,7 +151,7 @@ describe('runUseWorkspace', () => {
         {
           configDir,
           bundle: b,
-          http: {} as KyInstance,
+          http: {} as HttpClient,
           io,
           workspacesFactory: () => client as never,
         },
@@ -189,7 +189,7 @@ describe('runUseWorkspace', () => {
         {
           configDir,
           bundle: b,
-          http: {} as KyInstance,
+          http: {} as HttpClient,
           io,
           workspacesFactory: () => client as never,
         },

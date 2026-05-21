@@ -1,6 +1,6 @@
-import type { KyInstance } from 'ky'
 import type { HostsBundle } from '../../../auth/hosts.js'
 import type { AppInfoCache } from '../../../cache/app-info.js'
+import type { HttpClient } from '../../../http/types.js'
 import type { IOStreams } from '../../../io/streams.js'
 import { AppMetaClient } from '../../../api/app-meta.js'
 import { AppRunClient } from '../../../api/app-run.js'
@@ -32,7 +32,7 @@ export type RunAppOptions = {
 
 export type RunAppDeps = {
   readonly bundle: HostsBundle
-  readonly http: KyInstance
+  readonly http: HttpClient
   readonly host: string
   readonly io: IOStreams
   readonly cache?: AppInfoCache

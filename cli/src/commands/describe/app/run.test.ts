@@ -7,7 +7,8 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { startMock } from '../../../../test/fixtures/dify-mock/server.js'
 import { loadAppInfoCache } from '../../../cache/app-info.js'
 import { formatted, stringifyOutput } from '../../../framework/output.js'
-import { createClient } from '../../../http/client.js'
+import { createHttpClient } from '../../../http/client.js'
+import { openAPIBase } from '../../../util/host.js'
 import { runDescribeApp } from './run.js'
 
 function bundle(): HostsBundle {
@@ -40,7 +41,7 @@ describe('runDescribeApp', () => {
     const cache = await loadAppInfoCache({ configDir: dir })
     const data = await runDescribeApp(
       opts,
-      { bundle: bundle(), http: createClient({ host: mock.url, bearer: 'dfoa_test' }), host: mock.url, cache },
+      { bundle: bundle(), http: createHttpClient({ baseURL: openAPIBase(mock.url), bearer: 'dfoa_test' }), host: mock.url, cache },
     )
     return stringifyOutput(formatted({ format: opts.format ?? '', data }))
   }
@@ -83,13 +84,13 @@ describe('runDescribeApp', () => {
     const cache = await loadAppInfoCache({ configDir: dir })
     await runDescribeApp(
       { appId: 'app-1' },
-      { bundle: bundle(), http: createClient({ host: mock.url, bearer: 'dfoa_test' }), host: mock.url, cache },
+      { bundle: bundle(), http: createHttpClient({ baseURL: openAPIBase(mock.url), bearer: 'dfoa_test' }), host: mock.url, cache },
     )
     const before = cache.get(mock.url, 'app-1')
     expect(before).toBeDefined()
     await runDescribeApp(
       { appId: 'app-1', refresh: true },
-      { bundle: bundle(), http: createClient({ host: mock.url, bearer: 'dfoa_test' }), host: mock.url, cache },
+      { bundle: bundle(), http: createHttpClient({ baseURL: openAPIBase(mock.url), bearer: 'dfoa_test' }), host: mock.url, cache },
     )
     const after = cache.get(mock.url, 'app-1')
     expect(after?.fetchedAt).not.toBe(before?.fetchedAt ?? '')
@@ -104,7 +105,7 @@ describe('runDescribeApp', () => {
       { appId: 'nope' },
       {
         bundle: bundle(),
-        http: createClient({ host: mock.url, bearer: 'dfoa_test', retryAttempts: 0 }),
+        http: createHttpClient({ baseURL: openAPIBase(mock.url), bearer: 'dfoa_test', retryAttempts: 0 }),
         host: mock.url,
       },
     )).rejects.toThrow()

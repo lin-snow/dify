@@ -1,15 +1,15 @@
 import type { SessionListResponse } from '@dify/contracts/api/openapi/types.gen'
-import type { KyInstance } from 'ky'
+import type { HttpClient } from '../http/types.js'
 
 export class AccountSessionsClient {
-  private readonly http: KyInstance
+  private readonly http: HttpClient
 
-  constructor(http: KyInstance) {
+  constructor(http: HttpClient) {
     this.http = http
   }
 
   async list(): Promise<SessionListResponse> {
-    return this.http.get('account/sessions').json<SessionListResponse>()
+    return this.http.get<SessionListResponse>('account/sessions')
   }
 
   async revoke(sessionId: string): Promise<void> {

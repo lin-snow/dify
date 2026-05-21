@@ -3,7 +3,8 @@ import type { HostsBundle } from '../../../auth/hosts.js'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { startMock } from '../../../../test/fixtures/dify-mock/server.js'
 import { stringifyOutput, table } from '../../../framework/output.js'
-import { createClient } from '../../../http/client.js'
+import { createHttpClient } from '../../../http/client.js'
+import { openAPIBase } from '../../../util/host.js'
 import { AppListOutput } from './handlers.js'
 import { runGetApp } from './run.js'
 
@@ -32,7 +33,7 @@ describe('runGetApp', () => {
   })
 
   function http() {
-    return createClient({ host: mock.url, bearer: 'dfoa_test' })
+    return createHttpClient({ baseURL: openAPIBase(mock.url), bearer: 'dfoa_test' })
   }
 
   async function render(opts: Parameters<typeof runGetApp>[0] = {}): Promise<string> {

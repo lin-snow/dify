@@ -1,6 +1,6 @@
-import type { KyInstance } from 'ky'
 import type { HostsBundle } from '../../../auth/hosts.js'
 import type { TokenStore } from '../../../auth/store.js'
+import type { HttpClient } from '../../../http/types.js'
 import type { IOStreams } from '../../../io/streams.js'
 import { unlink } from 'node:fs/promises'
 import { join } from 'node:path'
@@ -14,7 +14,7 @@ export type LogoutOptions = {
   readonly configDir: string
   readonly io: IOStreams
   readonly bundle: HostsBundle | undefined
-  readonly http?: KyInstance
+  readonly http?: HttpClient
   readonly store: TokenStore
 }
 

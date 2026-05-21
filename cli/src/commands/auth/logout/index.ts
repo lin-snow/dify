@@ -1,11 +1,11 @@
-import type { KyInstance } from 'ky'
+import type { HttpClient } from '../../../http/types.js'
 import { loadHosts } from '../../../auth/hosts.js'
 import { selectStore } from '../../../auth/store.js'
 import { resolveConfigDir } from '../../../config/dir.js'
-import { createClient } from '../../../http/client.js'
+import { createHttpClient } from '../../../http/client.js'
 import { runWithSpinner } from '../../../io/spinner.js'
 import { realStreams } from '../../../io/streams.js'
-import { hostWithScheme } from '../../../util/host.js'
+import { hostWithScheme, openAPIBase } from '../../../util/host.js'
 import { DifyCommand } from '../../_shared/dify-command.js'
 import { runLogout } from './logout.js'
 
@@ -22,10 +22,10 @@ export default class Logout extends DifyCommand {
     const bundle = await loadHosts(configDir)
     const { store } = await selectStore({ configDir })
 
-    let http: KyInstance | undefined
+    let http: HttpClient | undefined
     if (bundle !== undefined && bundle.current_host !== '' && bundle.tokens?.bearer !== undefined && bundle.tokens.bearer !== '') {
-      http = createClient({
-        host: hostWithScheme(bundle.current_host, bundle.scheme),
+      http = createHttpClient({
+        baseURL: openAPIBase(hostWithScheme(bundle.current_host, bundle.scheme)),
         bearer: bundle.tokens.bearer,
         retryAttempts: 0,
       })
