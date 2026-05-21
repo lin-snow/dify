@@ -5,8 +5,8 @@ import type { Channel } from './info.js'
 import { META_PROBE_TIMEOUT_MS, MetaClient } from '../api/meta.js'
 import { loadHosts } from '../auth/hosts.js'
 import { resolveConfigDir } from '../config/dir.js'
-import { createClient } from '../http/client.js'
-import { hostWithScheme } from '../util/host.js'
+import { createHttpClient } from '../http/client.js'
+import { hostWithScheme, openAPIBase } from '../util/host.js'
 import { difyCompat, evaluateCompat } from './compat.js'
 import { versionInfo } from './info.js'
 
@@ -50,7 +50,7 @@ export type RunVersionProbeOptions = {
 const defaultLoadBundle = async (): Promise<HostsBundle | undefined> => loadHosts(resolveConfigDir())
 
 const defaultProbe: MetaProbe = async (endpoint) => {
-  const http = createClient({ host: endpoint, timeoutMs: META_PROBE_TIMEOUT_MS, retryAttempts: 0 })
+  const http = createHttpClient({ baseURL: openAPIBase(endpoint), timeoutMs: META_PROBE_TIMEOUT_MS, retryAttempts: 0 })
   return new MetaClient(http).serverVersion()
 }
 

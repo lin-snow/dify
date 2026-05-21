@@ -1,7 +1,7 @@
 import type { SessionRow } from '@dify/contracts/api/openapi/types.gen'
-import type { KyInstance } from 'ky'
 import type { HostsBundle } from '../../../../auth/hosts.js'
 import type { TokenStore } from '../../../../auth/store.js'
+import type { HttpClient } from '../../../../http/types.js'
 import type { IOStreams } from '../../../../io/streams.js'
 import { unlink } from 'node:fs/promises'
 import { join } from 'node:path'
@@ -15,7 +15,7 @@ import { runWithSpinner } from '../../../../io/spinner.js'
 export type DevicesListOptions = {
   readonly io: IOStreams
   readonly bundle: HostsBundle | undefined
-  readonly http: KyInstance
+  readonly http: HttpClient
   readonly json?: boolean
 }
 
@@ -39,7 +39,7 @@ export type DevicesRevokeOptions = {
   readonly configDir: string
   readonly io: IOStreams
   readonly bundle: HostsBundle | undefined
-  readonly http: KyInstance
+  readonly http: HttpClient
   readonly store: TokenStore
   readonly target?: string
   readonly all: boolean

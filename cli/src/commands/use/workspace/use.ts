@@ -1,5 +1,5 @@
-import type { KyInstance } from 'ky'
 import type { HostsBundle, Workspace } from '../../../auth/hosts.js'
+import type { HttpClient } from '../../../http/types.js'
 import type { IOStreams } from '../../../io/streams.js'
 import { WorkspacesClient } from '../../../api/workspaces.js'
 import { saveHosts } from '../../../auth/hosts.js'
@@ -15,9 +15,9 @@ export type UseWorkspaceOptions = {
 export type UseWorkspaceDeps = {
   readonly configDir: string
   readonly bundle: HostsBundle
-  readonly http: KyInstance
+  readonly http: HttpClient
   readonly io: IOStreams
-  readonly workspacesFactory?: (http: KyInstance) => WorkspacesClient
+  readonly workspacesFactory?: (http: HttpClient) => WorkspacesClient
 }
 
 /**
@@ -39,7 +39,7 @@ export async function runUseWorkspace(
   deps: UseWorkspaceDeps,
 ): Promise<HostsBundle> {
   const cs = colorScheme(colorEnabled(deps.io.isErrTTY))
-  const factory = deps.workspacesFactory ?? ((h: KyInstance) => new WorkspacesClient(h))
+  const factory = deps.workspacesFactory ?? ((h: HttpClient) => new WorkspacesClient(h))
   const client = factory(deps.http)
 
   const detail = await runWithSpinner(

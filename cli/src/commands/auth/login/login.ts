@@ -9,10 +9,10 @@ import * as readline from 'node:readline'
 import { DeviceFlowApi } from '../../../api/oauth-device.js'
 import { saveHosts } from '../../../auth/hosts.js'
 import { selectStore } from '../../../auth/store.js'
-import { createClient } from '../../../http/client.js'
+import { createHttpClient } from '../../../http/client.js'
 import { colorEnabled, colorScheme } from '../../../io/color.js'
 import { decideOpen, OpenDecision, openUrl, realEnv } from '../../../util/browser.js'
-import { bareHost, DEFAULT_HOST, resolveHost, validateVerificationURI } from '../../../util/host.js'
+import { bareHost, DEFAULT_HOST, openAPIBase, resolveHost, validateVerificationURI } from '../../../util/host.js'
 import { awaitAuthorization, realClock } from './device-flow.js'
 
 export type LoginOptions = {
@@ -36,7 +36,7 @@ export async function runLogin(opts: LoginOptions): Promise<HostsBundle> {
   const host = await resolveLoginHost(opts, insecure)
   const label = opts.deviceLabel ?? defaultDeviceLabel()
 
-  const api = opts.api ?? new DeviceFlowApi(createClient({ host }))
+  const api = opts.api ?? new DeviceFlowApi(createHttpClient({ baseURL: openAPIBase(host) }))
   const code = await api.requestCode({ device_label: label })
 
   renderCodePrompt(opts.io.err, cs, code)

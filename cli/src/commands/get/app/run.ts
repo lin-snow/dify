@@ -1,6 +1,6 @@
 import type { AppDescribeResponse, AppListResponse, AppMode } from '@dify/contracts/api/openapi/types.gen'
-import type { KyInstance } from 'ky'
 import type { HostsBundle } from '../../../auth/hosts.js'
+import type { HttpClient } from '../../../http/types.js'
 import type { IOStreams } from '../../../io/streams.js'
 import { AppsClient } from '../../../api/apps.js'
 import { WorkspacesClient } from '../../../api/workspaces.js'
@@ -24,11 +24,11 @@ export type GetAppOptions = {
 
 export type GetAppDeps = {
   readonly bundle: HostsBundle
-  readonly http: KyInstance
+  readonly http: HttpClient
   readonly io?: IOStreams
   readonly envLookup?: (k: string) => string | undefined
-  readonly appsFactory?: (http: KyInstance) => AppsClient
-  readonly workspacesFactory?: (http: KyInstance) => WorkspacesClient
+  readonly appsFactory?: (http: HttpClient) => AppsClient
+  readonly workspacesFactory?: (http: HttpClient) => WorkspacesClient
 }
 
 const ALL_WORKSPACES_CONCURRENCY = 4
@@ -39,8 +39,8 @@ export type GetAppResult = {
 
 export async function runGetApp(opts: GetAppOptions, deps: GetAppDeps): Promise<GetAppResult> {
   const env = deps.envLookup ?? ((k: string) => process.env[k])
-  const appsFactory = deps.appsFactory ?? ((h: KyInstance) => new AppsClient(h))
-  const wsFactory = deps.workspacesFactory ?? ((h: KyInstance) => new WorkspacesClient(h))
+  const appsFactory = deps.appsFactory ?? ((h: HttpClient) => new AppsClient(h))
+  const wsFactory = deps.workspacesFactory ?? ((h: HttpClient) => new WorkspacesClient(h))
 
   const apps = appsFactory(deps.http)
   const pageSize = resolveLimit(opts.limitRaw, env)

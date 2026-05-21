@@ -1,5 +1,5 @@
-import type { KyInstance } from 'ky'
 import type { HostsBundle } from '../../../auth/hosts.js'
+import type { HttpClient } from '../../../http/types.js'
 import type { IOStreams } from '../../../io/streams.js'
 import { MembersClient } from '../../../api/members.js'
 import { BaseError } from '../../../errors/base.js'
@@ -18,10 +18,10 @@ export type DeleteMemberOptions = {
 
 export type DeleteMemberDeps = {
   readonly bundle: HostsBundle
-  readonly http: KyInstance
+  readonly http: HttpClient
   readonly io?: IOStreams
   readonly envLookup?: (k: string) => string | undefined
-  readonly membersFactory?: (http: KyInstance) => MembersClient
+  readonly membersFactory?: (http: HttpClient) => MembersClient
 }
 
 export type DeleteMemberResult = {
@@ -42,7 +42,7 @@ export async function runDeleteMember(
   }
 
   const env = deps.envLookup ?? ((k: string) => process.env[k])
-  const factory = deps.membersFactory ?? ((h: KyInstance) => new MembersClient(h))
+  const factory = deps.membersFactory ?? ((h: HttpClient) => new MembersClient(h))
   const io = deps.io ?? nullStreams()
   const cs = colorScheme(colorEnabled(io.isErrTTY))
 
